@@ -27,3 +27,5 @@ A five-step grooming consult:
 Deploy with `vercel deploy` (or connect the repo in the Vercel dashboard). For AI previews, set `OPENAI_API_KEY` in the project environment variables; `OPENAI_IMAGE_MODEL` is optional and defaults to `gpt-image-1`. Without the key, everything works except the AI preview generation.
 
 Privacy: photos are validated on-device and are only sent to the try-on endpoint when a preview is generated. They are not stored.
+
+Pushes to `main` auto-deploy via Vercel.
