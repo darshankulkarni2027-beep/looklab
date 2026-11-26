@@ -1,73 +1,29 @@
-# LookLab MVP
+# LookLab
 
-A small deployable web MVP for the first LookLab user test.
+See your best haircut before you get it.
 
-## What works
-- Responsive landing page and early-access waitlist
-- Netlify Forms email collection (`looklab-waitlist`)
-- Photo upload with file type and size validation
-- Vibe selection and hair/styling preference inputs
-- Curated haircut recommendations
-- AI hairstyle try-on serverless function
-- Barber Card with haircut instructions
-- Print / Save as PDF
-- Demo still works without an AI key; recommendations and Barber Card work, while AI preview displays a setup message.
+**Live:** https://looklab-ashen.vercel.app
 
-## Run locally
+## What it is
 
-Requirements: Node.js 20+.
+A five-step grooming consult:
 
-```bash
-npm install
-npx netlify dev
-```
+1. **Consult** — upload a selfie or take one in the browser. The photo is checked on-device with face-api.js (face found, roughly front-facing, in focus). It never leaves the phone until you generate a preview.
+2. **Brief** — hair texture, styling effort, hair length today, last haircut, and one or two vibes (real people blend styles).
+3. **Picks** — three cuts chosen from your answers, each with an illustration and a "picked because" line.
+4. **Mirror** — the top pick generates automatically as an AI-edited concept; tap the other looks to preview them, and drag the before/after slider to compare.
+5. **Card** — a printable, shareable Barber Card with exact clipper guard numbers, so any barber can execute the cut.
 
-Open the local URL shown by Netlify CLI (usually http://localhost:8888).
+## Stack
 
-## Enable real AI hairstyle previews
+- `index.html` — the whole front end, no build step
+- `api/tryon.js` — Vercel serverless function: AI try-on via the OpenAI image API
+- `netlify/functions/tryon.mjs` + `netlify.toml` — Netlify equivalent of the same endpoint
+- `vercel.json` — rewrites `/.netlify/functions/tryon` to `/api/tryon`, so the same front end works on both hosts
+- face-api.js + face models loaded from the jsdelivr CDN at runtime
 
-1. Create an API key in your OpenAI API account.
-2. In Netlify site settings, add an environment variable named `OPENAI_API_KEY`.
-3. Optionally add `OPENAI_IMAGE_MODEL` (defaults to `gpt-image-1`).
-4. Redeploy the site.
-5. Open LookLab, upload a photo, choose a style, and click **Generate hairstyle preview**.
+## Setup
 
-Do not put the API key in `index.html`, frontend JavaScript, or a public repository. The key is used only by `netlify/functions/tryon.mjs`.
+Deploy with `vercel deploy` (or connect the repo in the Vercel dashboard). For AI previews, set `OPENAI_API_KEY` in the project environment variables; `OPENAI_IMAGE_MODEL` is optional and defaults to `gpt-image-1`. Without the key, everything works except the AI preview generation.
 
-The image edit endpoint sends the uploaded selfie to the configured image API to create the requested haircut preview. Review your API provider's current privacy, retention, and pricing terms before testing with real users. Ask testers for consent before uploading their photos.
-
-## Deploy to Netlify
-
-### Option A — Netlify UI
-1. Unzip this project.
-2. Drag the project folder contents into Netlify Drop, or connect the folder/repository through Netlify.
-3. In Site configuration → Environment variables, set `OPENAI_API_KEY`.
-4. Redeploy.
-5. Go to Forms and ensure form detection is enabled. Redeploy after enabling detection if Netlify asks.
-6. Submit a test email and verify it appears under Forms → `looklab-waitlist`.
-
-### Option B — Netlify CLI
-```bash
-npm install
-npx netlify login
-npx netlify init
-npx netlify env:set OPENAI_API_KEY "your-key"
-npx netlify deploy --build --prod
-```
-
-## Important MVP limitations
-- Haircut recommendations are curated rules based on the selected vibe and user preferences, not a trained face-analysis model.
-- AI hairstyle previews are visual concepts and may not perfectly predict a real barber result.
-- The app does not persist selfies or session data to a database. Images are held in browser memory for the session and passed to the serverless function only when the user requests a preview.
-- Netlify Forms stores waitlist submissions in your Netlify dashboard. Configure notifications/export there if desired.
-- Before a public launch, add a privacy policy, rate limiting, abuse protection, usage/cost limits, and an explicit photo-consent step.
-
-## Suggested first-100-user test
-Track:
-1. Landing page visits
-2. Waitlist signups
-3. Photo uploads
-4. Completed recommendations
-5. AI preview attempts/successes
-6. Barber Cards printed/saved
-7. Whether the user actually showed the card to a barber
+Privacy: photos are validated on-device and are only sent to the try-on endpoint when a preview is generated. They are not stored.
