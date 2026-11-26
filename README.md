@@ -29,3 +29,11 @@ Deploy with `vercel deploy` (or connect the repo in the Vercel dashboard). For A
 Privacy: photos are validated on-device and are only sent to the try-on endpoint when a preview is generated. They are not stored.
 
 Pushes to `main` auto-deploy via Vercel.
+
+## v2 polish
+
+- Mirror: "barber studying you" scene while the preview generates (scan line, landmark dots, orbiting scissors, rotating messages, barber-pole progress, clipper buzz) and a sweep-and-clippings reveal with a ding. Minimum 4.5s so the reveal feels earned.
+- Picks: 2.3s shortlisting shuffle, dealt cards, "Barber’s choice" stamp, morning-effort scale and barber-visit cadence.
+- Quirks: scroll-snipping hero scissors, peeling sticker, tap-the-ticker grooming tips, texture icons, effort slider, vibe quips, press-down tiles, upload quips.
+- Card: ticket look (perforations, serial, approved stamp), full-screen barber view, nearby-barber link; card image text spacing fixed.
+- Sound starts muted; friendly error copy when the preview fails (no env var names shown to users).
