@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f1efe9">
+<title>LookLab — See your best haircut before you get it</title>
+<style>
+:root{--ink:#111311;--paper:#f1efe9;--white:#fbfaf7;--muted:#6f6d66;--line:#dcd9cf;--soft:#e7e4db;--acid:#ffe94a;--tomato:#ff4d2e;--blue:#2b50ff;--pink:#ff7ab8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}button{cursor:pointer}
+.wrap{width:min(1180px,92%);margin:auto}
+header{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.logo{font-size:26px;font-weight:900;letter-spacing:-1.5px;text-transform:uppercase}.logo span{color:var(--muted)}
+.tag{font-size:10px;letter-spacing:2.5px;font-weight:800;color:var(--muted);text-transform:uppercase}
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+.kicker{font-size:11px;letter-spacing:3px;font-weight:800;color:var(--muted);text-transform:uppercase}
+h1{font-size:clamp(52px,9vw,124px);line-height:.95;letter-spacing:-.045em;margin:18px 0 20px;text-transform:uppercase;font-weight:900}
+.lead{font-size:17px;line-height:1.65;color:var(--muted);max-width:560px}
+.btn{border:0;border-radius:0;padding:15px 24px;font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase}
+.primary{background:var(--ink);color:var(--paper)}
+.secondary{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.linkish{background:none;border:0;padding:0;font-size:12px;letter-spacing:1.5px;font-weight:800;text-transform:uppercase;text-decoration:underline;text-underline-offset:4px;color:var(--ink)}
+.app{padding:56px 0 90px}
+.progress{display:flex;gap:8px;margin-bottom:38px}.progress i{height:2px;background:var(--line);flex:1}.progress i.on{background:var(--ink)}
+.stepline{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:30px}
+.stepline .num{font-size:12px;letter-spacing:2px;font-weight:800;color:var(--muted)}
+.panel{display:none}.panel.on{display:block}
+.panel h2{font-size:clamp(36px,5vw,64px);letter-spacing:-.03em;line-height:1;margin:6px 0 10px;text-transform:uppercase;font-weight:900}
+.sub{color:var(--muted);line-height:1.65;max-width:640px;font-size:15px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.panel.on{animation:fadeUp .35s ease}
+.crumbs{display:flex;gap:18px;flex-wrap:wrap}
+.crumb{background:none;border:0;padding:0;font-size:10px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:#b6b2a6;cursor:default}
+.crumb.done{color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.crumb.now{color:var(--ink)}
+.drop.dz-over{border-color:var(--ink);background:#fff;border-style:solid}
+.choice:hover,.look:hover{border-color:var(--ink)}
+.btn.primary:hover{background:#2c2f2c}
+.looknum{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
+.look .why{font-size:12px;color:var(--muted);line-height:1.55;margin:8px 0 0;display:block}.look .flag{display:block;font-size:11px;font-weight:700;color:var(--tomato);margin-top:6px}
+.hint{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.drop{margin-top:26px;padding:34px;border:1px dashed #b9b5a8;background:var(--white);text-align:center}
+.drop img{display:none;max-height:280px;max-width:100%;margin:0 auto 16px}
+.drop img.show{display:block}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:22px}
+.field{background:var(--white);border:1px solid var(--line);padding:16px}
+.field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:800}
+.field select{width:100%;border:0;border-bottom:1px solid var(--ink);padding:10px 2px;background:transparent;border-radius:0;font-weight:600}
+.vibes,.looks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.choice{border:1px solid var(--line);background:var(--white);padding:20px;text-align:left;border-radius:0}
+.choice.selected{border:1px solid var(--ink);background:var(--ink);color:var(--paper)}
+.choice.selected small{color:#c9c6bb}
+.choice b{display:block;font-size:15px;letter-spacing:.5px;text-transform:uppercase}
+.choice small{color:var(--muted);font-size:12px}
+.look{border:1px solid var(--line);background:var(--white);overflow:hidden;text-align:left;padding:0;border-radius:0}
+.look.selected{border:1px solid var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.look .swatch{height:150px;background:linear-gradient(135deg,#e3e0d7,#cfccc0);display:grid;place-items:center;color:var(--ink);font-size:34px}
+.look div.pad{padding:14px}
+.look b{display:block;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
+.look small{color:var(--muted);font-size:12px}
+.navrow{display:flex;justify-content:space-between;gap:12px;margin-top:30px;flex-wrap:wrap;align-items:center}
+.status{color:var(--muted);font-size:13px;margin-top:14px;min-height:20px}.status.err{color:var(--tomato);font-weight:700}
+.drop{position:relative;overflow:hidden}
+.previewWrap{position:relative;display:inline-block;max-width:100%}
+.frameFx{position:absolute;inset:0;display:none;pointer-events:none}
+.drop.scanning .frameFx{display:block}
+.drop.scanning:after{content:"";position:absolute;inset:0;background:rgba(17,19,17,.04);animation:pulse 1.4s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.3}to{opacity:1}}
+.frameFx .c{position:absolute;width:26px;height:26px;border:2.5px solid var(--tomato);opacity:0;animation:snap .4s cubic-bezier(.2,1.7,.4,1) forwards}
+.frameFx .tl{top:-6px;left:-6px;border-right:0;border-bottom:0}
+.frameFx .tr{top:-6px;right:-6px;border-left:0;border-bottom:0;animation-delay:.1s}
+.frameFx .bl{bottom:-6px;left:-6px;border-right:0;border-top:0;animation-delay:.2s}
+.frameFx .br{bottom:-6px;right:-6px;border-left:0;border-top:0;animation-delay:.3s}
+@keyframes snap{from{opacity:0;transform:scale(1.8)}60%{opacity:1}to{opacity:1;transform:scale(1)}}
+.frameFx .m{position:absolute;opacity:0}
+.frameFx .crown{top:14%;left:12%;right:12%;height:2px;background:repeating-linear-gradient(90deg,var(--tomato) 0 8px,transparent 8px 15px);transform-origin:left;animation:drawX .55s ease forwards .7s,fade 2s ease-in-out infinite alternate 1.4s}
+.frameFx .jaw{top:82%;left:12%;right:12%;height:2px;background:repeating-linear-gradient(90deg,var(--blue) 0 8px,transparent 8px 15px);transform-origin:right;animation:drawX .55s ease forwards 1.15s,fade 2s ease-in-out infinite alternate 1.85s}
+.frameFx .side{left:50%;top:10%;bottom:10%;width:2px;background:repeating-linear-gradient(0deg,var(--pink) 0 8px,transparent 8px 15px);transform-origin:top;animation:drawY .55s ease forwards 1.6s,fade 2s ease-in-out infinite alternate 2.3s}
+@keyframes drawX{from{opacity:1;transform:scaleX(0)}to{opacity:1;transform:scaleX(1)}}
+@keyframes drawY{from{opacity:1;transform:scaleY(0)}to{opacity:1;transform:scaleY(1)}}
+@keyframes fade{from{opacity:1}to{opacity:.45}}
+.preview-box{display:grid;grid-template-columns:280px 1fr;gap:24px;background:var(--white);border:1px solid var(--line);padding:22px;margin-top:24px}
+.preview-box img{width:100%;max-height:360px;object-fit:cover;background:var(--soft)}
+.badge{font-size:10px;font-weight:800;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase}
+.preview-box h3{font-size:24px;letter-spacing:-.02em;margin:8px 0 6px;text-transform:uppercase}
+.instructions{color:#4c4a44;line-height:1.9;padding-left:19px;font-size:14px}
+.barber{background:var(--white);border:1px solid var(--ink);padding:26px;margin-top:24px}
+.barber h3{margin:8px 0;font-size:26px;text-transform:uppercase;letter-spacing:-.02em}
+footer{padding:26px 0;color:var(--muted);font-size:11px;letter-spacing:2px;text-transform:uppercase;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+/* quirky layer */
+.serif{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:400;letter-spacing:-.02em;text-transform:none}
+.sticker{display:inline-block;border:1.5px solid var(--ink);padding:8px 14px;font-size:10px;letter-spacing:2.5px;font-weight:800;text-transform:uppercase;transform:rotate(-6deg);background:var(--white);box-shadow:3px 3px 0 var(--ink)}
+.hero .sticker{margin-top:26px}
+.ticker{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;padding:12px 0;transform:rotate(-.6deg);margin:0 -4px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.ticker span{display:inline-block;font-size:12px;letter-spacing:3px;font-weight:800;text-transform:uppercase;padding-right:48px;animation:tick 22s linear infinite}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.btn.primary{box-shadow:3px 3px 0 rgba(17,19,17,.25);transition:transform .12s ease,box-shadow .12s ease}
+.btn.primary:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.btn.secondary:hover{background:var(--soft)}
+.choice.selected,.look.selected{transform:rotate(-.7deg);box-shadow:4px 4px 0 var(--ink)}
+.look .swatch{font-size:44px}.look .swatch span{display:inline-block;transform:rotate(-8deg)}
+.crumb.now:after{content:" *"}
+.star{color:var(--muted)}
+.outline{color:transparent;-webkit-text-stroke:3px var(--ink)}
+.serif{color:var(--tomato);background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='12' viewBox='0 0 120 12'><path d='M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8' fill='none' stroke='%23ff4d2e' stroke-width='3'/></svg>") bottom left no-repeat;background-size:100% 14px;padding-bottom:10px}
+.sticker{background:var(--pink)}
+.ticker{background:var(--acid);color:var(--ink)}
+.progress i.on{background:var(--tomato)}
+.btn.primary:hover{box-shadow:5px 5px 0 var(--tomato)}
+.choice:nth-child(odd),.look:nth-child(odd){transform:rotate(-.4deg)}
+.choice:nth-child(even),.look:nth-child(even){transform:rotate(.4deg)}
+.choice.selected,.look.selected{transform:rotate(-.7deg);box-shadow:4px 4px 0 var(--blue)}
+.looknum{color:var(--blue)}
+.star{color:var(--tomato)}
+.kicker .star:last-of-type{color:var(--blue)}
+.crumb.now:after{color:var(--tomato)}
+.dz-over{border-color:var(--tomato)!important}
+.badge{background:var(--acid);color:var(--ink);padding:3px 8px;display:inline-block}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>")}
+.hero{position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-4%;top:-40px;width:min(420px,70vw);aspect-ratio:1;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='none' stroke='%23111311' stroke-width='2.5' stroke-linecap='round'><circle cx='24' cy='68' r='11'/><circle cx='24' cy='32' r='11'/><path d='M32 61 L84 18 M32 39 L84 82'/></g></svg>") center/contain no-repeat;opacity:.05;transform:rotate(18deg);pointer-events:none}
+.btn{transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.btn.primary:active{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--tomato)}
+.choice,.look{transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.choice:hover,.look:hover{transform:translateY(-3px);border-color:var(--ink)}
+.choice.selected:hover,.look.selected:hover{transform:rotate(-.7deg) translateY(-3px)}
+.progress i{transition:background .4s ease}
+.barber{outline:2px dashed var(--line);outline-offset:-9px}
+.cutline{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:16px;margin:64px auto 0;width:min(1180px,92%)}
+.cutline:after{content:"";flex:1;border-top:2px dashed var(--line)}
+.cutline span{transform:rotate(-90deg);display:inline-block}
+.sound{background:none;border:1px solid var(--line);padding:6px 10px;font-size:9px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:var(--muted);cursor:pointer;font-family:inherit}
+.sound:hover{border-color:var(--ink);color:var(--ink)}
+.hdr-right{display:flex;align-items:center;gap:16px}
+.footbar{display:flex;height:10px;margin-top:0}
+.footbar i{flex:1}
+@media(max-width:760px){.outline{-webkit-text-stroke:2px var(--ink)}.grid2,.vibes,.looks,.preview-box{grid-template-columns:1fr}h1{letter-spacing:-.03em}.app{padding:36px 0 64px}header .tag{display:none}}
+.look .because{display:block;font-size:11px;font-weight:700;color:var(--blue);margin-top:6px}
+.drop.shake{animation:shakeX .45s ease;border-color:var(--tomato)}
+@keyframes shakeX{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.ba{position:relative;overflow:hidden;background:var(--soft);--pos:50%;touch-action:none;aspect-ratio:4/5;border:1px solid var(--line)}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba #baAfter{clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+.ba-handle{position:absolute;top:0;bottom:0;left:var(--pos);width:3px;background:var(--paper);box-shadow:0 0 0 1px var(--ink);cursor:ew-resize}
+.ba-handle span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--ink);color:var(--paper);border-radius:999px;width:34px;height:34px;display:grid;place-items:center;font-size:14px}
+.mpicks{display:flex;gap:10px;margin:16px 0 4px}
+.mpick{border:1px solid var(--line);background:var(--white);padding:8px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;color:var(--ink)}
+.mpick svg{height:44px}
+.mpick.selected{border-color:var(--ink);box-shadow:3px 3px 0 var(--blue)}
+.cam{position:fixed;inset:0;background:rgba(17,19,17,.85);z-index:60;display:grid;place-items:center;padding:20px}
+.cam[hidden]{display:none}
+.cam-inner{background:var(--paper);border:2px solid var(--ink);padding:18px;max-width:440px;width:100%}
+.cam-stage{position:relative;background:#111311}
+.cam-stage video{width:100%;display:block;transform:scaleX(-1)}
+.cam-oval{position:absolute;inset:0;width:100%;height:100%}
+</style>
+</head>
+<body>
+<header><div class="wrap" style="display:flex;justify-content:space-between;align-items:center"><div class="logo">Look<span>Lab</span></div><div class="hdr-right"><div class="tag">AI Grooming Advisor <span class="star">✂&#xFE0E;</span></div><button class="sound" id="soundToggle" aria-pressed="true">Sound on</button></div></div></header>
+
+<section class="hero"><div class="wrap">
+<div class="kicker"><span class="star">*</span> A premium salon consultation, in your pocket <span class="star">*</span></div>
+<h1>Don’t <span class="outline">guess</span><br>your next <span class="serif">cut.</span></h1>
+<p class="lead">Take a seat. Show us your hair, tell us the vibe you are after, and leave with directions any barber can follow.</p>
+<div class="sticker">Walk-ins welcome — Est. 2026 ↗</div>
+</div></section>
+<div class="ticker" aria-hidden="true"><span>Walk-ins welcome ✂&#xFE0E; Take a seat ✂&#xFE0E; Trust the mirror ✂&#xFE0E; Leave sharper ✂&#xFE0E; Walk-ins welcome ✂&#xFE0E; Take a seat ✂&#xFE0E; Trust the mirror ✂&#xFE0E; Leave sharper ✂&#xFE0E; </span></div>
+
+<main class="app"><div class="wrap">
+<div class="stepline"><nav class="crumbs" id="crumbs"><button class="crumb now" data-go="1">01 Consult</button><button class="crumb" data-go="2">02 Brief</button><button class="crumb" data-go="3">03 Picks</button><button class="crumb" data-go="4">04 Mirror</button><button class="crumb" data-go="5">05 Card</button></nav><span class="tag">Interactive prototype</span></div>
+<div class="progress"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+
+<section class="panel on" data-step="1">
+<div class="kicker">01 · The consultation</div><h2>Take a seat.</h2>
+<p class="sub">Every great cut starts with an honest look. Any clear, roughly front-facing photo works — decent light and your face in the frame is all we need. Slight tilt or a cropped hairline is fine; we will tell you if a photo will not work. It is checked on your device and never saved.</p>
+<div class="drop" id="dropZone"><span class="previewWrap"><img id="photoPreview" alt="Your uploaded selfie"><span class="frameFx" aria-hidden="true"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><i class="m crown"></i><i class="m jaw"></i><i class="m side"></i></span></span><input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" hidden><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="btn secondary" id="choosePhoto">Choose a photo</button><button class="btn secondary" id="takeSelfie">Take a selfie now</button></div><p class="status" id="photoStatus">JPG, PNG or WebP · max 5 MB · or drag & drop here</p></div>
+<div class="grid2"><div class="field"><label for="hairType">Your hair texture</label><select id="hairType"><option>Wavy</option><option>Straight</option><option>Curly</option><option>Coily</option></select></div><div class="field"><label for="maintenance">Styling effort</label><select id="maintenance"><option>Low maintenance</option><option>Some daily styling</option><option>Happy to style daily</option></select></div></div>
+<div class="grid2"><div class="field"><label for="hairLen">Hair length today</label><select id="hairLen"><option>Short</option><option selected>Medium</option><option>Long</option></select></div><div class="field"><label for="cutFreq">Last haircut</label><select id="cutFreq"><option>Within 4 weeks</option><option>1–3 months ago</option><option>3+ months ago</option></select></div></div>
+<div class="navrow"><span></span><button class="btn primary" id="toVibe">Continue →</button></div>
+</section>
+
+<section class="panel" data-step="2">
+<div class="kicker">02 · The brief</div><h2>What are we<br>going for today?</h2>
+<p class="sub">Tell your stylist the direction. Pick one or two — real people blend styles. There is no wrong answer, and you can always come back and try another.</p>
+<div class="vibes" id="vibeChoices">
+<button class="choice selected" data-vibe="Stylish"><b>Stylish</b><small>Modern & considered</small></button>
+<button class="choice" data-vibe="Professional"><b>Professional</b><small>Sharp & polished</small></button>
+<button class="choice" data-vibe="Trendy"><b>Trendy</b><small>Current & expressive</small></button>
+<button class="choice" data-vibe="Clean"><b>Clean</b><small>Neat & minimal</small></button>
+<button class="choice" data-vibe="Masculine"><b>Masculine</b><small>Bold & structured</small></button>
+<button class="choice" data-vibe="Bold"><b>Bold / Statement</b><small>Standout & fearless</small></button>
+</div>
+<div class="navrow"><button class="linkish back">← Back</button><button class="btn primary" id="getLooks">Show me the picks →</button></div>
+</section>
+
+<section class="panel" data-step="3">
+<div class="kicker">03 · The stylist’s picks</div><h2>Three cuts,<br>chosen for you.</h2>
+<p class="sub">Chosen from your brief, your hair texture and how much styling you enjoy — not a medical or facial assessment. Tap one to try it on.</p>
+<div class="looks" id="lookChoices"></div><p class="hint">Tap a card to choose — the first is our top pick for you</p>
+<div class="navrow"><button class="linkish back">← Back</button><button class="btn primary" id="toPreview">Try it on →</button></div>
+</section>
+
+<section class="panel" data-step="4">
+<div class="kicker">04 · The mirror</div><h2>See it on you.</h2>
+<p class="sub">Before the first snip, look in the mirror. Your top pick generates automatically — tap another look below to preview it. Drag the handle on the photo to compare before and after. Visual inspiration, not a guarantee of the exact real-world cut.</p>
+<div class="preview-box"><div class="ba" id="baBox"><img id="baBefore" alt="Your original photo"><img id="baAfter" alt="Hairstyle preview"><div class="ba-handle" id="baHandle"><span>↔</span></div></div><div><div class="badge">Selected style</div><h3 id="selectedTitle">Low Taper + Textured Crop</h3><p id="selectedWhy" class="sub"></p><div class="mpicks" id="mirrorPicks"></div><p class="status" id="generateStatus"></p><div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><button class="btn secondary" id="toBarber" style="display:none">Create my Barber Card →</button><button class="linkish" id="regenBtn" style="display:none">Regenerate preview</button></div></div></div>
+<div class="navrow"><button class="linkish back">← Back</button></div>
+</section>
+
+<section class="panel" data-step="5">
+<div class="kicker">05 · Your style card</div><h2>Your cut,<br>written down.</h2>
+<p class="sub">Hand this to your barber — it says exactly what to do. They will adapt it to your hair density, growth pattern and preferences.</p>
+<div class="barber" id="barberCard"><div class="badge">LookLab Barber Card</div><h3 id="barberTitle">Low Taper + Textured Crop</h3><p id="barberMeta" style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:2px 0 0"></p><div class="preview-box" style="margin:14px 0"><img id="barberImage" alt="Selected hairstyle preview"><div><b style="text-transform:uppercase;letter-spacing:1px;font-size:13px">What to ask for</b><ul class="instructions" id="barberInstructions"></ul></div></div><p style="font-size:12px;color:var(--muted)">Reference image is an AI concept. Confirm lengths and fade height with your barber.</p></div>
+<div class="navrow"><div style="display:flex;gap:18px;align-items:center"><button class="linkish back">← Back</button><button class="linkish" id="againBtn">Try another look</button></div><div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn secondary" id="shareCard">Share ↗</button><button class="btn secondary" id="rateCard">Rate this look 🔥👍😬</button><button class="btn primary" id="downloadCard">Download card image ↓</button></div></div>
+<div class="navrow" style="margin-top:14px"><div style="display:flex;gap:18px;align-items:center"><button class="linkish" id="startOver">Start over with a new photo</button><button class="linkish" id="printCard">Print</button></div><span></span></div>
+<p class="status" id="cardStatus">The image is sized for Instagram and WhatsApp (portrait 4:5). Print users: choose “Save as PDF” to keep a copy.</p>
+</section>
+</div></main>
+
+<div class="cam" id="camBox" hidden>
+<div class="cam-inner">
+<div class="cam-stage"><video id="camVideo" autoplay playsinline muted></video><svg class="cam-oval" viewBox="0 0 200 260" aria-hidden="true"><ellipse cx="100" cy="130" rx="72" ry="98" fill="none" stroke="#f1efe9" stroke-width="2.5" stroke-dasharray="8 7"/></svg></div>
+<p class="status" id="camTip">Hold still — checking the framing…</p>
+<div style="display:flex;gap:12px;justify-content:center"><button class="btn primary" id="camCapture">Capture</button><button class="btn secondary" id="camClose">Cancel</button></div>
+</div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cutline" aria-hidden="true"><span>✂&#xFE0E;</span></div>
+<div class="footbar" aria-hidden="true"><i style="background:var(--acid)"></i><i style="background:var(--tomato)"></i><i style="background:var(--blue)"></i><i style="background:var(--pink)"></i></div><footer><div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;width:min(1180px,92%)"><span>© 2026 LookLab</span><span>Good hair days ahead</span></div></footer>
+
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let AC=null,soundOn=localStorage.getItem('looklab-sound')!=='off';
+function ac(){AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}
+function snip(){if(!soundOn)return;try{const c=ac(),t=c.currentTime;[0,.11].forEach((d,k)=>{const dur=.07,buf=c.createBuffer(1,c.sampleRate*dur,c.sampleRate),data=buf.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*Math.pow(1-i/data.length,2);const src=c.createBufferSource();src.buffer=buf;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=2400+k*700;f.Q.value=.9;const g=c.createGain();g.gain.setValueAtTime(.38,t+d);g.gain.exponentialRampToValueAtTime(.001,t+d+dur);src.connect(f);f.connect(g);g.connect(c.destination);src.start(t+d)})}catch(e){}}
+function pop(){if(!soundOn)return;try{const c=ac(),t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(600,t);o.frequency.exponentialRampToValueAtTime(200,t+.14);g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.12);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.13)}catch(e){}}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.id==='soundToggle')return;if(b.matches('.choice,.look,.crumb'))pop();else snip()});
+function paintSound(){const t=$('#soundToggle');t.textContent=soundOn?'Sound on':'Sound off';t.setAttribute('aria-pressed',soundOn)}
+$('#soundToggle').onclick=()=>{soundOn=!soundOn;localStorage.setItem('looklab-sound',soundOn?'on':'off');paintSound();if(soundOn)snip()};
+paintSound();
+let photoFile=null,photoData=null,step=1,vibes=['Stylish'],selected=null,generatedUrl=null,genStyle=null,picksCache=[];
+const texture=()=>$('#hairType').value, effort=()=>$('#maintenance').value;
+const styles=[
+{name:'Low Taper + Textured Crop',guard:'#2–3 guard taper on the sides · 2–3 inches left on top',len:'medium',tags:'Versatile · textured · modern',why:'A neat taper with textured length on top gives a balanced, flexible look. Ask your barber to adapt the top length to your natural texture.',instructions:['Low taper around the temples and neckline.','Keep approximately 2–3 inches on top, adjusted to your hair.','Add soft texture and movement; avoid removing too much weight.','Keep the neckline natural and blend the sides smoothly.','Style with a small amount of matte paste.']},
+{name:'Mid Fade + Quiff',guard:'#1–2 guard mid fade · 3–4 inches on top, longer at the fringe',len:'long',tags:'Defined · lifted · confident',why:'A mid fade and lifted front create a more structured silhouette. It usually needs some styling time in the morning.',instructions:['Mid fade on the sides and back, blended smoothly.','Leave enough length at the front to style upward.','Keep the top layered so it moves rather than sitting heavy.','Ask for a clean but natural hairline.','Use a light styling cream or matte clay with a blow-dry.']},
+{name:'French Crop + Soft Fringe',guard:'#2–3 guard taper · 1.5–2 inches on top with a forward fringe',len:'short',tags:'Clean · easy · understated',why:'A crop keeps styling simple while a soft fringe adds shape. It is a practical option if you prefer a shorter finish.',instructions:['Short textured crop with a soft, natural fringe.','Low or mid taper depending on how much contrast you want.','Keep the top textured, not blunt or overly uniform.','Blend the sides and back into the top.','Finish with a small amount of matte product.']},
+{name:'Classic Side Part',guard:'#3–4 guard tapered sides, no skin · 2–3 inches on top',len:'medium',tags:'Polished · timeless · professional',why:'A classic side part offers a tidy, adaptable shape that can be styled more formally or casually.',instructions:['Classic tapered sides, not too tight.','Leave 2–3 inches on top with a natural side part.','Use subtle layers to create movement.','Keep the sideburns and neckline neat.','Style with a light cream or low-shine pomade.']},
+{name:'Textured Crew Cut',guard:'#2 guard on the sides · 0.5–1 inch on top',len:'short',tags:'Low effort · sharp · practical',why:'A textured crew cut is a shorter, lower-maintenance direction with a clean outline.',instructions:['Short crew cut with a little extra length at the front.','Low taper or soft fade on the sides.','Keep the top textured and slightly uneven for movement.','Avoid an overly high or harsh hairline.','Use a small amount of matte paste if needed.']},
+{name:'Modern Curly Taper',guard:'#2–3 guard taper · 2–3 inches of curl kept on top',len:'medium',tags:'Natural texture · shape · definition',why:'A curly taper keeps the natural texture visible while cleaning up the outline. Ask your barber to work with your curl pattern.',instructions:['Taper the sides and neckline while retaining curl volume on top.','Shape the top dry where possible to respect the curl pattern.','Keep the front natural; avoid cutting curls too short.','Blend the temple area softly.','Use curl cream or leave-in product rather than heavy wax.']}
+];
+let maxStep=1;
+function showStep(n){step=n;maxStep=Math.max(maxStep,n);$$('.panel').forEach(p=>p.classList.toggle('on',Number(p.dataset.step)===n));$$('.progress i').forEach((x,i)=>x.classList.toggle('on',i<n));$$('.crumb').forEach(c=>{const g=Number(c.dataset.go);c.classList.toggle('now',g===n);c.classList.toggle('done',g<maxStep&&g!==n)});document.querySelector('.app').scrollIntoView({behavior:'smooth',block:'start'});}
+$('#crumbs').onclick=e=>{const b=e.target.closest('.crumb');if(!b)return;const g=Number(b.dataset.go);if(g<maxStep)showStep(g)};
+$('#choosePhoto').onclick=()=>$('#photoInput').click();
+const drop=$('.drop');
+['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('dz-over')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('dz-over')}));
+drop.addEventListener('drop',e=>{const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(!f)return;const dt=new DataTransfer();dt.items.add(f);$('#photoInput').files=dt.files;$('#photoInput').dispatchEvent(new Event('change',{bubbles:true}))});
+let photoOK=false, modelsReady=null;
+function loadImg(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src})}
+function blurScore(img){const c=document.createElement('canvas');const w=160,hh=Math.round(w*img.height/img.width);c.width=w;c.height=hh;const x=c.getContext('2d');x.drawImage(img,0,0,w,hh);const d=x.getImageData(0,0,w,hh).data;const g=[];for(let i=0;i<w*hh;i++)g[i]=d[i*4]*.3+d[i*4+1]*.59+d[i*4+2]*.11;let sum=0,n=0;for(let y=1;y<hh-1;y++)for(let xx=1;xx<w-1;xx++){const lap=g[y*w+xx-1]+g[y*w+xx+1]+g[(y-1)*w+xx]+g[(y+1)*w+xx]-4*g[y*w+xx];sum+=lap*lap;n++}return sum/n}
+function ensureModels(){if(!modelsReady)modelsReady=(async()=>{const W='https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights';await faceapi.nets.tinyFaceDetector.loadFromUri(W);await faceapi.nets.faceLandmark68Net.loadFromUri(W)})();return modelsReady}
+async function validatePhoto(dataUrl,img){
+if(blurScore(img)<12)return{ok:false,reason:'This photo is too blurry to work with — retake it in good light and hold the phone steady.'};
+try{await ensureModels()}catch(e){return{ok:true,note:'unchecked'}}
+let det=await faceapi.detectSingleFace(img,new faceapi.TinyFaceDetectorOptions({inputSize:512,scoreThreshold:.2})).withFaceLandmarks();
+if(!det)det=await faceapi.detectSingleFace(img,new faceapi.TinyFaceDetectorOptions({inputSize:256,scoreThreshold:.15})).withFaceLandmarks();
+if(!det)return{ok:false,reason:'No face found — use a clear, front-facing photo of yourself, not a drawing or object.'};
+const box=det.detection.box,lm=det.landmarks;let tip=null;
+if(box.width<img.width*0.12)tip='Move a little closer so the preview is more accurate.';
+const nose=lm.getNose();const noseX=nose[Math.floor(nose.length/2)].x;const cx=box.x+box.width/2;
+if(Math.abs(noseX-cx)>box.width*0.22)return{ok:false,reason:'This looks like a side profile — face the camera straight on.'};
+const brows=[...lm.getLeftEyeBrow(),...lm.getRightEyeBrow()];const browTop=Math.min(...brows.map(p=>p.y));
+if(browTop-box.y<box.height*0.05)tip='Your hairline is partly cropped — the preview still works, but a step back makes it better.';
+return{ok:true,tip}}
+function photoErr(msg){$('#photoStatus').classList.add('err');$('#photoStatus').textContent=msg;const dz=$('#dropZone');dz.classList.remove('shake');void dz.offsetWidth;dz.classList.add('shake');setTimeout(()=>dz.classList.remove('shake'),600)}
+async function acceptPhoto(dataUrl,f){
+photoOK=false;$('#photoStatus').classList.remove('err');$('#photoStatus').textContent='Checking your photo — face, framing and focus, all on your device…';
+const img=await loadImg(dataUrl);
+$('#photoPreview').src=img.src;$('#photoPreview').classList.add('show');$('#dropZone').classList.add('scanning');
+const v=await validatePhoto(img.src,img);$('#dropZone').classList.remove('scanning');
+if(!v.ok){photoFile=null;photoData=null;$('#photoInput').value='';$('#photoPreview').classList.remove('show');$('#photoPreview').removeAttribute('src');photoErr(v.reason);return}
+photoFile=f;photoData=img.src;photoOK=true;$('#photoStatus').textContent='Photo accepted ✓ — continue when you are ready'+(v.tip?' Tip: '+v.tip:'')}
+$('#photoInput').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){photoErr('Please choose an image smaller than 5 MB.');return}if(!/^image\/(jpeg|png|webp)$/.test(f.type)){return}acceptPhoto(await fileToDataUrl(f),f)};
+let camStream=null,camTimer=null;
+function closeCam(){clearInterval(camTimer);camTimer=null;if(camStream)camStream.getTracks().forEach(t=>t.stop());camStream=null;$('#camBox').hidden=true}
+$('#takeSelfie').onclick=async()=>{$('#camBox').hidden=false;$('#camTip').textContent='Hold still — checking the framing…';
+try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});$('#camVideo').srcObject=camStream}
+catch(e){$('#camTip').textContent='Camera is not available in this browser — use Choose a photo instead; your phone will offer the camera there.';return}
+camTimer=setInterval(async()=>{const v=$('#camVideo');if(!v.videoWidth)return;try{await ensureModels();
+const det=await faceapi.detectSingleFace(v,new faceapi.TinyFaceDetectorOptions({inputSize:256,scoreThreshold:.2})).withFaceLandmarks();
+if(!det){$('#camTip').textContent='Center your face inside the oval.';return}
+const b=det.detection.box;
+if(b.width<v.videoWidth*0.18){$('#camTip').textContent='Move closer — fill more of the oval.';return}
+const nose=det.landmarks.getNose();const nx=nose[Math.floor(nose.length/2)].x;const cx=b.x+b.width/2;
+if(Math.abs(nx-cx)>b.width*0.22){$('#camTip').textContent='Face the camera straight on.';return}
+$('#camTip').textContent='Looks good — push your hair off your forehead, then tap Capture.'}catch(e){}},700)};
+$('#camCapture').onclick=async()=>{const v=$('#camVideo');if(!v.videoWidth)return;const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;const x=c.getContext('2d');x.translate(c.width,0);x.scale(-1,1);x.drawImage(v,0,0);const url=c.toDataURL('image/jpeg',.92);closeCam();acceptPhoto(url,null)};
+$('#camClose').onclick=closeCam;
+function fileToDataUrl(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
+$('#toVibe').onclick=()=>{if(!photoData){photoErr('Upload a photo before continuing.');return}if(!photoOK){$('#photoStatus').textContent='Still checking your photo…';return}showStep(2)};
+$('#vibeChoices').onclick=e=>{const b=e.target.closest('[data-vibe]');if(!b)return;const v=b.dataset.vibe;
+if(vibes.includes(v)){if(vibes.length>1)vibes=vibes.filter(x=>x!==v)}
+else{vibes.push(v);if(vibes.length>2)vibes.shift()}
+$$('#vibeChoices [data-vibe]').forEach(x=>x.classList.toggle('selected',vibes.includes(x.dataset.vibe)))};
+$$('.back').forEach(b=>b.onclick=()=>showStep(step-1));
+const EFFORT={0:2,1:3,2:1,3:2,4:1,5:2};
+const EFFORT_LABEL={3:'Heads up: needs about 10 min of styling each morning',2:'Light styling most days'};
+const VIBE_ORDER={Stylish:[0,1,2],Professional:[3,0,1],Trendy:[1,0,2],Clean:[2,4,3],Masculine:[1,4,0],Bold:[1,0,3]};
+function effortMax(){return effort()==='Low maintenance'?2:3}
+function recommendations(){
+const LEN_PEN={Long:{short:1.2},Short:{long:1.2}};
+const score=i=>vibes.reduce((s,v)=>{const o=VIBE_ORDER[v]||[];const r=o.indexOf(i);return s+(r<0?6:r)},0)
++((LEN_PEN[$('#hairLen').value]||{})[styles[i].len]||0)
+-($('#cutFreq').value==='3+ months ago'&&EFFORT[i]===1?0.5:0);
+let order=[0,1,2,3,4,5].slice().sort((a,b)=>score(a)-score(b)||a-b);
+if((texture()==='Curly'||texture()==='Coily')&&!order.slice(0,2).includes(5)){order=order.filter(i=>i!==5);order.splice(2,0,5)}
+order=order.filter(i=>EFFORT[i]<=effortMax());
+const because='Picked because: '+texture().toLowerCase()+' hair · '+effort().toLowerCase()+' · '+vibes.map(v=>v.toLowerCase()).join(' + ');
+return order.slice(0,3).map(i=>({...styles[i],idx:i,because,flag:EFFORT[i]===3&&effort()==='Some daily styling'?EFFORT_LABEL[3]:null}))}
+function hairSVG(i){
+const head='<ellipse cx="50" cy="66" rx="25" ry="30" fill="#f1efe9" stroke="#111311" stroke-width="3"/>';
+const hair=[
+'<path d="M26 60 Q24 32 50 30 Q76 32 74 60 L68 48 L62 56 L56 46 L50 54 L44 46 L38 56 L32 48 Z" fill="#111311"/>',
+'<path d="M26 60 Q24 34 44 30 Q52 14 66 20 Q78 26 74 60 Q70 42 56 40 Q38 40 26 60 Z" fill="#111311"/>',
+'<path d="M26 58 Q25 32 50 30 Q75 32 74 58 L74 52 L26 52 Z" fill="#111311"/><line x1="26" y1="52" x2="74" y2="52" stroke="#f1efe9" stroke-width="2"/>',
+'<path d="M26 60 Q24 32 50 30 Q76 32 74 60 Q72 44 58 42 L40 40 Q30 44 26 60 Z" fill="#111311"/><line x1="58" y1="32" x2="60" y2="42" stroke="#f1efe9" stroke-width="2.5"/>',
+'<path d="M27 56 Q26 36 50 34 Q74 36 73 56 Q60 44 50 44 Q40 44 27 56 Z" fill="#111311"/>',
+'<path d="M26 58 Q20 44 30 38 Q26 28 38 28 Q42 20 50 24 Q58 20 62 28 Q74 28 70 38 Q80 44 74 58 Q66 46 50 46 Q34 46 26 58 Z" fill="#111311"/>'
+][i];
+return '<svg viewBox="0 0 100 110" style="height:110px" aria-hidden="true">'+head+hair+'</svg>'}
+$('#getLooks').onclick=()=>{const picks=recommendations();picksCache=picks;$('#lookChoices').innerHTML='';picks.forEach((s,i)=>{const b=document.createElement('button');b.className='look'+(i===0?' selected':'');b.innerHTML=`<div class="swatch">${hairSVG(s.idx)}</div><div class="pad"><span class="looknum">Look 0${i+1}</span><b>${s.name}</b><small>${s.tags}</small><span class="why">${s.why}</span><span class="because">${s.because}</span>${s.flag?`<span class="flag">${s.flag}</span>`:''}</div>`;b.onclick=()=>{$$('.look').forEach(x=>x.classList.toggle('selected',x===b));selected=s};$('#lookChoices').appendChild(b)});selected=picks[0];showStep(3)};
+function renderMirrorPicks(){const box=$('#mirrorPicks');box.innerHTML='';picksCache.forEach((s,i)=>{const b=document.createElement('button');b.className='mpick'+(selected&&s.name===selected.name?' selected':'');b.innerHTML=hairSVG(s.idx)+'<span>'+(i===0?'Top pick':'Look 0'+(i+1))+'</span>';b.onclick=()=>{selected=s;enterMirror()};box.appendChild(b)})}
+function enterMirror(){if(!selected)return;$('#selectedTitle').textContent=selected.name;$('#selectedWhy').textContent=selected.why;
+$('#baBefore').src=photoData;$('#baAfter').src=(genStyle===selected.name&&generatedUrl)?generatedUrl:photoData;
+renderMirrorPicks();$('#generateStatus').textContent='';$('#toBarber').style.display='none';
+showStep(4);doGenerate()}
+$('#toPreview').onclick=enterMirror;
+async function doGenerate(){if(!photoData||!selected)return;generatedUrl=null;genStyle=null;
+$('#regenBtn').style.display='none';
+$('#generateStatus').textContent='Creating your '+selected.name+' concept — this can take a little while. Keep this window open.';
+try{const response=await fetch('/.netlify/functions/tryon',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:photoData,hairstyle:selected.name,vibe:vibes.join(' + '),hairTexture:texture(),stylingEffort:effort()})});
+const data=await response.json();if(!response.ok)throw new Error(data.error||'Preview generation failed');
+generatedUrl=data.imageUrl;genStyle=selected.name;$('#baAfter').src=generatedUrl;
+$('#generateStatus').textContent='Your AI concept is ready — drag the handle on the photo to compare before and after.';$('#toBarber').style.display='inline-block'}
+catch(err){$('#generateStatus').textContent=err.message+' — You can still create a Barber Card from your selected style. Add OPENAI_API_KEY to enable AI previews.';$('#toBarber').style.display='inline-block'}
+finally{$('#regenBtn').style.display='inline-block'}}
+$('#regenBtn').onclick=doGenerate;
+(()=>{const box=$('#baBox');let dragging=false;
+const setPos=cx=>{const r=box.getBoundingClientRect();let p=(cx-r.left)/r.width*100;p=Math.max(4,Math.min(96,p));box.style.setProperty('--pos',p+'%')};
+box.addEventListener('pointerdown',e=>{dragging=true;setPos(e.clientX);box.setPointerCapture(e.pointerId)});
+box.addEventListener('pointermove',e=>{if(dragging)setPos(e.clientX)});
+box.addEventListener('pointerup',()=>dragging=false);
+box.addEventListener('pointercancel',()=>dragging=false)})();
+$('#toBarber').onclick=()=>{const image=(genStyle===selected.name&&generatedUrl)?generatedUrl:photoData;$('#barberTitle').textContent=selected.name;$('#barberMeta').textContent='Your hair: '+texture()+' · '+effort().toLowerCase()+' — your barber can adapt lengths and styling to this.';$('#barberImage').src=image;$('#barberInstructions').innerHTML=[`<li><b>Clipper map:</b> ${selected.guard}</li>`].concat(selected.instructions.map(x=>`<li>${x}</li>`)).join('');showStep(5)};
+$('#againBtn').onclick=()=>showStep(3);
+$('#startOver').onclick=()=>{photoFile=null;photoData=null;generatedUrl=null;genStyle=null;selected=null;$('#photoPreview').classList.remove('show');$('#photoPreview').removeAttribute('src');$('#photoInput').value='';$('#photoStatus').textContent='JPG, PNG or WebP · max 5 MB · or drag & drop here';showStep(1)};
+function wrapText(ctx,text,x,y,maxW,lh){const words=text.split(' ');let line='',yy=y;for(const w of words){const t=line?line+' '+w:w;if(ctx.measureText(t).width>maxW&&line){ctx.fillText(line,x,yy);line=w;yy+=lh}else line=t}if(line)ctx.fillText(line,x,yy);return yy}
+function drawScissors(ctx,cx,cy,s,color){ctx.save();ctx.translate(cx,cy);ctx.scale(s/100,s/100);ctx.strokeStyle=color;ctx.lineWidth=3;ctx.lineCap='round';ctx.beginPath();ctx.arc(-26,18,11,0,7);ctx.stroke();ctx.beginPath();ctx.arc(-26,-18,11,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(-18,11);ctx.lineTo(34,-32);ctx.moveTo(-18,-11);ctx.lineTo(34,32);ctx.stroke();ctx.restore()}
+function renderCard(){return new Promise(res=>{const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+const ink='#111311',paper='#f1efe9',muted='#6f6d66',line='#b9b5a8',acid='#ffe94a',tomato='#ff4d2e';
+x.fillStyle=paper;x.fillRect(0,0,W,H);
+for(let i=0;i<2600;i++){x.fillStyle='rgba(17,19,17,'+(Math.random()*.05)+')';x.fillRect(Math.random()*W,Math.random()*H,1.4,1.4)}
+x.strokeStyle=ink;x.lineWidth=3;x.strokeRect(28,28,W-56,H-56);
+x.setLineDash([8,7]);x.strokeStyle=line;x.lineWidth=2;x.strokeRect(48,48,W-96,H-96);x.setLineDash([]);
+x.fillStyle=ink;x.font='800 54px Arial';x.fillText('LOOK',84,118);const lw=x.measureText('LOOK').width;x.fillStyle=muted;x.fillText('LAB',84+lw,118);
+drawScissors(x,W-130,100,54,ink);
+x.fillStyle=acid;x.fillRect(84,150,332,46);x.strokeStyle=ink;x.lineWidth=2;x.strokeRect(84,150,332,46);
+x.fillStyle=ink;x.font='800 21px Arial';x.fillText('LOOKLAB STYLE CARD',102,180);
+const finish=()=>{
+x.fillStyle=tomato;x.beginPath();for(let i=0;i<=220;i+=4){const yy=836+Math.sin(i/14)*6;i===0?x.moveTo(84+i,yy):x.lineTo(84+i,yy)}x.lineWidth=4;x.stroke();
+x.fillStyle=muted;x.font='700 20px Arial';x.fillText(('YOUR HAIR: '+texture()+' · '+effort()).toUpperCase(),84,886);
+x.fillStyle=tomato;x.fillText(('CLIPPER MAP: '+selected.guard).toUpperCase(),84,916);x.fillStyle=muted;
+x.fillStyle=ink;x.font='800 24px Arial';x.fillText('WHAT TO ASK FOR',84,940);
+x.font='400 24px Arial';let yy=986;selected.instructions.forEach(t=>{x.fillStyle=tomato;x.font='800 24px Arial';x.fillText('*',84,yy);x.font='400 24px Arial';x.fillStyle=ink;yy=wrapText(x,t,124,yy,840,34)+20});
+x.setLineDash([10,8]);x.strokeStyle=line;x.lineWidth=2;x.beginPath();x.moveTo(84,H-158);x.lineTo(W-84,H-158);x.stroke();x.setLineDash([]);
+drawScissors(x,84+18,H-158,26,muted);
+x.fillStyle=muted;x.font='700 20px Arial';x.fillText('LOOKLAB-ASHEN.VERCEL.APP',84,H-104);
+x.font='400 20px Arial';x.fillText('Confirm lengths and fade height with your barber. Good hair days ahead.',84,H-70);
+res(c)};
+const img=new Image();img.onload=()=>{const fw=W-168,fh=470,fx=84,fy=226;const sc=Math.max(fw/img.width,fh/img.height),dw=img.width*sc,dh=img.height*sc;x.save();x.beginPath();x.rect(fx,fy,fw,fh);x.clip();x.drawImage(img,fx+(fw-dw)/2,fy+(fh-dh)/2,dw,dh);x.restore();x.strokeStyle=ink;x.lineWidth=3;x.strokeRect(fx,fy,fw,fh);
+x.fillStyle=ink;x.font='800 56px Arial';wrapText(x,selected.name.toUpperCase(),84,776,900,60);finish()};
+img.onerror=()=>{x.fillStyle='#e3e0d7';x.fillRect(84,226,W-168,470);x.strokeStyle=ink;x.lineWidth=3;x.strokeRect(84,226,W-168,470);x.fillStyle=ink;x.font='800 56px Arial';wrapText(x,selected.name.toUpperCase(),84,776,900,60);finish()};
+img.src=generatedUrl||photoData||''})}
+function cardBlob(){return renderCard().then(c=>new Promise(r=>c.toBlob(r,'image/png')))}
+function downloadBlob(b,name){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+$('#downloadCard').onclick=async()=>{$('#cardStatus').textContent='Drawing your card…';try{downloadBlob(await cardBlob(),'looklab-style-card.png');$('#cardStatus').textContent='Card image downloaded — post it anywhere. ✓'}catch(e){$('#cardStatus').textContent='Could not create the image here — try Print instead.'}};
+async function shareImage(text,okMsg){$('#cardStatus').textContent='Drawing your card…';try{const b=await cardBlob(),f=new File([b],'looklab-style-card.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'My LookLab style card',text});$('#cardStatus').textContent=okMsg}else{downloadBlob(b,'looklab-style-card.png');$('#cardStatus').textContent='Sharing is not supported in this browser — the image was downloaded instead.'}}catch(e){if(e&&e.name!=='AbortError')$('#cardStatus').textContent='Could not share here — use Download instead.';else $('#cardStatus').textContent=''}}
+$('#shareCard').onclick=()=>shareImage('My next haircut, planned with LookLab.','Shared ✓');
+$('#rateCard').onclick=()=>shareImage('My next haircut, planned with LookLab. Rate this look — reply with one: 🔥 👍 😬','Shared ✓ — ratings come back as replies');
+$('#printCard').onclick=()=>{const card=$('#barberCard').innerHTML;const w=window.open('','_blank');w.document.write(`<html><head><title>LookLab Style Card</title><style>body{font-family:Arial,sans-serif;padding:36px;color:#111;background:#f1efe9}.barber{background:#fbfaf7;border:2px solid #111;padding:34px;max-width:640px;margin:0 auto;outline:2px dashed #b9b5a8;outline-offset:-10px}h3{font-size:28px;letter-spacing:-.5px}img{max-width:260px;max-height:300px;object-fit:cover;border:2px solid #111}li{line-height:1.9}.badge{display:inline-block;background:#ffe94a;border:1.5px solid #111;padding:4px 10px;font-size:11px;letter-spacing:2px;font-weight:800;color:#111}#barberMeta{color:#6f6d66}</style></head><body>${card}<script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()};
+</script>
+</body></html>
