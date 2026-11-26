@@ -244,6 +244,83 @@ footer{padding:26px 0;color:var(--muted);font-size:11px;letter-spacing:2px;text-
 .bm-grid ol{font-size:clamp(20px,2.6vw,26px);line-height:1.6;margin:0;padding-left:28px}
 @media(max-width:760px){.bm-grid{grid-template-columns:1fr}.cardstamp{width:72px;height:72px;font-size:8px;top:56px;right:16px}.serial{top:14px;right:16px}}
 @media(prefers-reduced-motion:reduce){.ticker span,.genfx .scan,.genfx .orbit,.deck i,.pole i{animation:none!important}}
+
+/* ---- v3: mascot street ---- */
+.street{position:relative;height:236px;margin:-14px 0 34px;overflow:hidden;border:1.5px solid var(--ink);background:#dfe3e6;user-select:none;-webkit-user-select:none}
+.st-sky{position:absolute;inset:0;background:linear-gradient(#cfd8de,#e8e6df)}
+.st-far{position:absolute;left:0;top:0;height:186px;width:150%;transition:transform 1.2s cubic-bezier(.45,0,.3,1)}
+.st-far svg{width:100%;height:100%;display:block}
+.st-beams{position:absolute;inset:0 0 50px;background:repeating-linear-gradient(115deg,transparent 0 90px,rgba(255,255,255,.28) 90px 150px,transparent 150px 260px);mix-blend-mode:soft-light;pointer-events:none;animation:beams 14s linear infinite;opacity:var(--sun,.4);transition:opacity 1s ease}
+@keyframes beams{to{background-position:260px 0}}
+.st-light{position:absolute;left:14px;top:62px;width:16px;height:124px;border-left:4px solid #3a3f48;z-index:2}
+.st-light:before{content:"";position:absolute;left:-4px;top:0;width:22px;height:4px;background:#3a3f48}
+.st-light i{position:absolute;left:8px;width:12px;height:12px;border:2px solid #111311;background:#2a2e33}
+.st-light .lr{top:8px}.st-light .lg{top:24px}
+.street:not(.go) .st-light .lr{background:#ff4d2e;box-shadow:0 0 8px #ff4d2e}
+.street.go .st-light .lg{background:#3ddc97;box-shadow:0 0 8px #3ddc97}
+.st-signs{position:absolute;left:0;right:0;top:14px;height:0;z-index:2}
+.st-signs span{position:absolute;transform:translateX(-50%);background:var(--white);border:1.5px solid var(--ink);padding:4px 8px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;display:flex;gap:6px;align-items:center;white-space:nowrap;transition:background .3s ease,transform .3s ease,box-shadow .3s ease;box-shadow:2px 2px 0 rgba(17,19,17,.25)}
+.st-signs span em{font-style:normal;color:var(--muted)}
+.st-signs span:nth-child(1){left:10%}.st-signs span:nth-child(2){left:30%}.st-signs span:nth-child(3){left:50%}.st-signs span:nth-child(4){left:70%}.st-signs span:nth-child(5){left:90%}
+.st-signs span.on{background:var(--acid);transform:translateX(-50%) rotate(-3deg) scale(1.08);box-shadow:3px 3px 0 var(--ink)}
+.st-signs span.on em{color:var(--ink)}
+.st-signs span.done{background:#f7f5ef}.st-signs span.done b:after{content:" ✓";color:var(--tomato)}
+.minipole{display:inline-block;width:8px;height:22px;margin:-10px 0;border:1.5px solid var(--ink);border-radius:4px;background:repeating-linear-gradient(-45deg,var(--tomato) 0 4px,#fff 4px 8px,var(--blue) 8px 12px,#fff 12px 16px);background-size:22.6px 22.6px;animation:poleRoll .9s linear infinite}
+.st-walk{position:absolute;left:0;right:0;bottom:44px;height:150px;z-index:3}
+.st-curb{position:absolute;left:0;right:0;bottom:-6px;height:12px;background:#ecebe5;border-top:1.5px solid var(--ink)}
+.st-curb:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:repeating-linear-gradient(90deg,var(--acid) 0 60px,transparent 60px 140px)}
+.st-road{position:absolute;left:0;right:0;bottom:0;height:44px;background:#3a4150;overflow:hidden}
+.st-road .zebra{position:absolute;left:4%;top:6px;width:120px;height:32px;background:repeating-linear-gradient(#f1efe9 0 4px,transparent 4px 9px);opacity:.85}
+.st-road .car{position:absolute;bottom:2px;left:-25%;width:110px;animation:car 13s linear infinite 3s;filter:drop-shadow(0 2px 0 rgba(0,0,0,.25))}
+@keyframes car{0%{left:-25%}12%{left:125%}100%{left:125%}}
+.st-gloom{position:absolute;inset:0;background:linear-gradient(#1b2340,#2b3a5a);mix-blend-mode:multiply;opacity:var(--gloom,.4);pointer-events:none;transition:opacity 1.1s ease;z-index:4}
+.mascot{position:absolute;bottom:0;left:var(--x);width:94px;height:136px;transform:translateX(-50%);transition:left 1.2s linear;cursor:pointer;outline:none;--tilt:22deg;--mess:1}
+.m-flip{width:100%;height:100%;transition:transform .2s ease}
+.mascot.back .m-flip{transform:scaleX(-1)}
+.m-svg{width:100%;height:100%;overflow:visible}
+.m-shadow{fill:rgba(17,19,17,.25)}
+.m-legA,.m-legB,.m-arm{transform-box:fill-box;transform-origin:50% 0}
+.m-head{transform-origin:40px 52px;transform:rotate(var(--tilt));transition:transform .9s cubic-bezier(.3,1.4,.5,1)}
+.m-scribble{transform:translate(40px,8px) scale(var(--mess));transition:transform .9s ease}
+.m-scribble path{animation:jitter .35s steps(2) infinite;transform-box:fill-box;transform-origin:center}
+@keyframes jitter{0%{transform:rotate(0)}50%{transform:rotate(14deg)}100%{transform:rotate(-8deg)}}
+.m-fresh,.m-happy{opacity:0}.mascot.fresh .m-fresh,.mascot.happy .m-happy{opacity:1}.mascot.fresh .m-messy,.mascot.happy .m-sad{opacity:0}
+.m-fresh,.m-messy,.m-happy,.m-sad{transition:opacity .25s ease}
+.m-blush{opacity:0;transition:opacity .4s}.mascot.happy .m-blush{opacity:.45}
+.m-all{transition:transform .2s}
+.mascot.walking .m-all{animation:bob .3s ease-in-out infinite alternate}
+.mascot.walking .m-legA{animation:legA .3s ease-in-out infinite alternate}
+.mascot.walking .m-legB{animation:legA .3s ease-in-out infinite alternate-reverse}
+.mascot.walking .m-arm{animation:armS .3s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-2.5px)}}
+@keyframes legA{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
+@keyframes armS{from{transform:rotate(14deg)}to{transform:rotate(-14deg)}}
+.mascot.idle:not(.walking) .m-all{animation:breathe 2.4s ease-in-out infinite}
+@keyframes breathe{50%{transform:translateY(-1px) scaleY(1.01)}}
+.mascot.jump .m-all{animation:jump .55s cubic-bezier(.3,1.6,.5,1)}
+@keyframes jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-22px) rotate(-6deg)}}
+.m-scissors{opacity:0;transform-box:fill-box;transform-origin:center}
+.mascot.incut .m-scissors{opacity:1;animation:sciss .7s linear infinite}
+@keyframes sciss{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(-18px,-6px) rotate(-30deg)}50%{transform:translate(-30px,4px) rotate(-10deg)}75%{transform:translate(-14px,10px) rotate(20deg)}100%{transform:translate(0,0) rotate(0)}}
+.mascot.incut .m-head{animation:hold 1.4s ease-in-out infinite}
+@keyframes hold{50%{transform:rotate(calc(var(--tilt) + 3deg))}}
+.m-bubble{position:absolute;bottom:74%;left:82%;transform:none;margin:0;background:var(--white);border:1.5px solid var(--ink);padding:6px 10px;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:2px 2px 0 var(--ink);pointer-events:none;z-index:5}
+.m-bubble:after{content:"";position:absolute;left:-6px;bottom:8px;width:10px;height:10px;background:var(--white);border-left:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg)}
+.mascot.lefty .m-bubble{left:auto;right:82%}.mascot.lefty .m-bubble:after{left:auto;right:-6px;border:0;border-right:1.5px solid var(--ink);border-top:1.5px solid var(--ink)}
+.m-bubble.pop{animation:bub .4s cubic-bezier(.2,1.6,.4,1)}
+@keyframes bub{from{opacity:0;transform:translateY(6px) scale(.7)}}
+.m-bubble.hide{opacity:0;transition:opacity .2s}
+.m-fly{position:absolute;left:62%;top:-14px;width:14px;height:10px;display:flex;gap:0;animation:fly 3.2s ease-in-out infinite;transition:all .8s ease;z-index:6}
+.m-fly i{width:7px;height:9px;background:var(--acid);border:1px solid #c9a800;border-radius:60% 40% 50% 50%;transform-origin:right center;animation:flap .18s ease-in-out infinite alternate}
+.m-fly i+i{transform-origin:left center;border-radius:40% 60% 50% 50%;animation-direction:alternate-reverse}
+@keyframes flap{from{transform:scaleX(1)}to{transform:scaleX(.2)}}
+@keyframes fly{0%{transform:translate(0,0)}25%{transform:translate(14px,-12px)}50%{transform:translate(-6px,-22px)}75%{transform:translate(-18px,-6px)}100%{transform:translate(0,0)}}
+.mascot.landed .m-fly{left:44%;top:8px;animation:none}
+.mascot.landed .m-fly i{animation-duration:.9s}
+.spark{position:absolute;width:8px;height:8px;background:var(--acid);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);pointer-events:none;z-index:6;animation:spark .9s ease-out forwards}
+@keyframes spark{from{transform:translate(0,0) scale(.4);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(1.2) rotate(90deg);opacity:0}}
+@media(max-width:760px){.street{height:216px}.mascot{width:80px;height:116px}.m-bubble{white-space:normal;width:max-content;max-width:150px}.st-signs span em{display:none}.st-signs span{padding:3px 6px}.st-light{display:none}.m-bubble{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.mascot{transition:none}.st-far{transition:none}.st-beams,.st-road .car,.m-fly,.m-scribble path{animation:none!important}}
 </style>
 </head>
 <body>
@@ -260,6 +337,40 @@ footer{padding:26px 0;color:var(--muted);font-size:11px;letter-spacing:2px;text-
 <main class="app"><div class="wrap">
 <div class="stepline"><nav class="crumbs" id="crumbs"><button class="crumb now" data-go="1">01 Consult</button><button class="crumb" data-go="2">02 Brief</button><button class="crumb" data-go="3">03 Picks</button><button class="crumb" data-go="4">04 Mirror</button><button class="crumb" data-go="5">05 Card</button></nav><span class="tag">Interactive prototype</span></div>
 <div class="progress"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+<div class="street" id="street">
+<div class="st-sky"></div>
+<div class="st-far" id="stFar"><svg id="stFacade" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+<div class="st-beams" aria-hidden="true"></div>
+<div class="st-light" aria-hidden="true"><i class="lr"></i><i class="lg"></i></div>
+<div class="st-signs" id="stSigns" aria-hidden="true"><span data-s="1"><b>01</b><em>Consult</em></span><span data-s="2"><b>02</b><em>Brief</em></span><span data-s="3"><b>03</b><em>Picks</em></span><span data-s="4" class="shop"><i class="minipole"></i><b>04</b><em>Mirror</em></span><span data-s="5"><b>05</b><em>Card</em></span></div>
+<div class="st-walk"><div class="st-curb"></div><div class="mascot" id="mascot" style="--x:-8%" role="button" tabindex="0" aria-label="LookLab mascot — tap for a line">
+<p class="m-bubble" id="mBubble">Ugh. Bad hair day.</p>
+<div class="m-flip"><svg class="m-svg" viewBox="0 0 80 116" aria-hidden="true">
+<ellipse class="m-shadow" cx="40" cy="112" rx="20" ry="3.5"/>
+<g class="m-all">
+<g class="m-legB"><rect x="41" y="86" width="8" height="20" rx="3" fill="#1d2230"/><rect x="40" y="103" width="13" height="6" rx="3" fill="#111311"/></g>
+<g class="m-legA"><rect x="32" y="86" width="8" height="20" rx="3" fill="#262c3c"/><rect x="31" y="103" width="13" height="6" rx="3" fill="#111311"/></g>
+<path d="M27 58 Q26 52 34 50 L48 50 Q55 52 54 60 L56 90 Q40 95 25 90 Z" fill="#2d3548"/>
+<path d="M27 66 L33 88 M53 64 L50 74" stroke="#1d2230" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<g class="m-arm"><rect x="43" y="56" width="8" height="24" rx="4" fill="#262c3c"/><circle cx="47" cy="81" r="3.5" fill="#f1cfae"/><path d="M42 82 q5 -6 10 0" fill="none" stroke="#5a3a1e" stroke-width="2"/><rect x="38" y="83" width="18" height="13" rx="2" fill="#8a5a2b"/><rect x="38" y="87" width="18" height="1.5" fill="#6d4420"/></g>
+<g class="m-head">
+<path d="M20 44 Q18 30 30 28 L32 50 Q24 52 20 44 Z" fill="#232a3a"/>
+<circle cx="40" cy="34" r="17" fill="#f3d2b4"/>
+<g class="m-messy"><path d="M23 33 Q22 15 40 15 Q58 15 57 31 L54 26 L52 33 L48 24 L45 31 L41 22 L38 30 L34 21 L31 30 L27 24 Z" fill="#111311"/><path d="M36 15 q-4 -8 3 -10 M44 16 q3 -7 9 -5" stroke="#111311" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>
+<g class="m-fresh"><path d="M23 33 Q22 15 40 15 Q57 15 57 30 Q52 22 44 23 Q36 24 30 30 Q26 28 23 33 Z" fill="#111311"/><path d="M44 18 Q51 18 54 24" stroke="#f1efe9" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/><path d="M33 22 Q40 14 50 17" stroke="#ff4d2e" stroke-width="2" fill="none" stroke-linecap="round" opacity=".55"/></g>
+<circle cx="49" cy="35" r="2.2" fill="#111311"/><circle cx="49.7" cy="34.3" r=".7" fill="#fff"/>
+<ellipse cx="51" cy="41" rx="2.6" ry="1.6" fill="#ff7ab8" opacity=".45" class="m-blush"/>
+<path class="m-sad" d="M46 46 Q49 44 52 46" stroke="#111311" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path class="m-happy" d="M45 44 Q49 49 53 44" stroke="#111311" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<g class="m-scribble"><path d="M-12 0 c4 -10 14 -8 10 0 s-12 8 -8 -2 s16 -10 14 2 s-14 6 -10 -4 s18 -6 14 4 s-10 4 -6 -4 c2 -6 12 -4 8 4 M-14 -4 c6 -4 10 4 4 6 s-6 -10 4 -8" stroke="#6f6d66" stroke-width="1.3" fill="none" stroke-linecap="round"/></g>
+</g>
+<g class="m-scissors"><text x="58" y="20" font-size="14">✂&#xFE0E;</text></g>
+</g></svg></div>
+<span class="m-fly" aria-hidden="true"><i></i><i></i></span>
+</div></div>
+<div class="st-road" aria-hidden="true"><i class="zebra"></i><i class="car"><svg viewBox="0 0 120 40"><path d="M6 30 Q4 20 16 18 L34 8 Q44 4 70 4 Q88 4 98 16 L112 20 Q118 22 116 30 Z" fill="#2b50ff"/><path d="M38 10 L68 8 L66 18 L32 18 Z M72 8 Q86 8 92 17 L72 18 Z" fill="#cfe0ff" opacity=".85"/><circle cx="30" cy="31" r="7" fill="#111311"/><circle cx="92" cy="31" r="7" fill="#111311"/></svg></i></div>
+<div class="st-gloom" id="stGloom" aria-hidden="true"></div>
+</div>
 
 <section class="panel on" data-step="1">
 <div class="kicker">01 · The consultation</div><h2>Take a seat.</h2>
@@ -559,5 +670,47 @@ $('#barberMode').onclick=()=>{const m=$('#bMode');$('#bmTitle').textContent=sele
 const closeB=()=>{$('#bMode').hidden=true;if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})};
 $('#bClose').onclick=closeB;document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&!$('#bMode').hidden)$('#bMode').hidden=true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#bMode').hidden)closeB()});
+
+/* ===== v3: mascot walks the street ===== */
+(()=>{
+const street=$('#street'),m=$('#mascot'),bub=$('#mBubble'),far=$('#stFar');
+// facade: panels, windows, doors drawn once
+(()=>{const svg=$('#stFacade'),W=1800,H=186;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);let g='';
+const tones=['#c9d0d6','#bcc4cc','#d3d8dc','#b4bec8'];let x=0,i=0;
+while(x<W){const w=180+((i*73)%120);g+=`<rect x="${x}" y="0" width="${w}" height="${H}" fill="${tones[i%4]}"/><line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="#9aa5b1" stroke-width="2"/><line x1="${x}" y1="52" x2="${x+w}" y2="52" stroke="#a7b1bb" stroke-width="1.5"/>`;
+for(let k=0;k<Math.floor(w/90);k++){const wx=x+24+k*90,wy=(i%2?78:86);g+=`<rect x="${wx}" y="${wy}" width="46" height="34" fill="#4a6f8a" stroke="#2e3a46" stroke-width="2.5"/><rect x="${wx+3}" y="${wy+3}" width="18" height="28" fill="#7fb3c9" opacity=".55"/><rect x="${wx+26}" y="${wy+16}" width="16" height="15" fill="#9fd0e0" opacity=".35"/>`}
+g+=`<circle cx="${x+10}" cy="70" r="1.8" fill="#8a96a2"/><circle cx="${x+10}" cy="78" r="1.8" fill="#8a96a2"/>`;x+=w;i++}
+svg.innerHTML=g})();
+const LINES={1:'Ugh. Bad hair day.',2:'Okay… what am I going for?',3:'Ooh. Options.',4:'Okay mirror, be kind.',5:'Fresh. Good hair day. ✨'};
+const POKE=['Is my hair okay? Don’t answer.','Don’t look at the fringe.','Butterfly, not now.','Trust the mirror.','I’ve been growing this out since 2024.','Walk-ins welcome, right?'];
+const CUT_LINES=['Hold still…','Snip snip!','A little off the top…','Don’t move. Don’t sneeze.','Is that… a fade?'];
+const TILT=[22,14,7,2,-6],MESS=[1,.75,.5,.3,0],GLOOM=[.42,.3,.18,.1,0],SUN=[.15,.35,.55,.75,1];
+let cur=0,walkT=null,lineT=null,cutT=null;
+function say(t,hold){clearTimeout(lineT);bub.classList.remove('hide','pop');void bub.offsetWidth;bub.textContent=t;bub.classList.add('pop');if(hold)lineT=setTimeout(()=>bub.classList.add('hide'),hold)}
+function sparks(n){for(let i=0;i<n;i++){const s=document.createElement('i');s.className='spark';s.style.left=(30+Math.random()*40)+'%';s.style.top=(10+Math.random()*40)+'%';const a=Math.random()*6.28,r=30+Math.random()*30;s.style.setProperty('--dx',Math.cos(a)*r+'px');s.style.setProperty('--dy',Math.sin(a)*r-10+'px');s.style.animationDelay=Math.random()*.15+'s';m.appendChild(s);setTimeout(()=>s.remove(),1200)}}
+function mood(n){const k=n-1;m.style.setProperty('--tilt',TILT[k]+'deg');m.style.setProperty('--mess',m.classList.contains('fresh')?0:MESS[k]);street.style.setProperty('--gloom',GLOOM[k]);street.style.setProperty('--sun',SUN[k]);
+m.classList.toggle('happy',n>=5||m.classList.contains('fresh'));m.classList.toggle('landed',n===5);if(n===5&&!m.classList.contains('fresh')){m.classList.add('fresh');m.style.setProperty('--mess',0)}
+$$('#stSigns span').forEach(sp=>{const s=Number(sp.dataset.s);sp.classList.toggle('on',s===n);sp.classList.toggle('done',s<n)})}
+function walkTo(n,intro){if(n===cur&&!intro)return;const from=cur||0;cur=n;const x=10+(n-1)*20;
+const dist=Math.abs(n-from)||1;const dur=Math.min(2.4,.75+dist*.55);
+m.classList.toggle('back',n<from);m.classList.toggle('lefty',n>=4);m.style.transitionDuration=dur+'s';far.style.transitionDuration=dur+'s';
+m.classList.remove('incut');clearInterval(cutT);
+m.classList.add('walking');street.classList.add('go');bub.classList.add('hide');
+requestAnimationFrame(()=>{m.style.setProperty('--x',x+'%');far.style.transform=`translateX(${-(n-1)*8}%)`});
+clearTimeout(walkT);walkT=setTimeout(()=>{m.classList.remove('walking','back');street.classList.remove('go');mood(n);say(LINES[n]);if(n===5){sparks(14);m.classList.remove('jump');void m.offsetWidth;m.classList.add('jump')}},dur*1000)}
+m.classList.add('idle');
+// hook into the flow
+const _show=showStep;showStep=function(n){_show(n);walkTo(n)};
+const _start=startGenFx;startGenFx=function(){_start();m.classList.add('incut');let k=0;clearInterval(cutT);const go=()=>say(CUT_LINES[k++%CUT_LINES.length]);setTimeout(go,step===4&&!m.classList.contains('walking')?0:1300);cutT=setInterval(go,2500);m.style.setProperty('--mess',.12)};
+const _stop=stopGenFx;stopGenFx=function(ok){_stop(ok);clearInterval(cutT);m.classList.remove('incut');if(ok===false&&step===4)say('Mirror’s foggy. Still got the card!')};
+const _reveal=revealAfter;revealAfter=function(url){_reveal(url);setTimeout(()=>{m.classList.add('fresh','happy');m.style.setProperty('--mess',0);m.style.setProperty('--tilt','-6deg');say('Wait… is that me?! 😍');sparks(16);m.classList.remove('jump');void m.offsetWidth;m.classList.add('jump')},1000)};
+$('#vibeChoices').addEventListener('click',e=>{if(!e.target.closest('[data-vibe]'))return;setTimeout(()=>say($('#vibeQuip').textContent),30)});
+$('#startOver').addEventListener('click',()=>{m.classList.remove('fresh','happy','landed');setTimeout(()=>mood(1),50)});
+const poke=()=>{say(pick(POKE),2600);pop();m.classList.remove('jump');void m.offsetWidth;m.classList.add('jump')};
+m.addEventListener('click',poke);m.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();poke()}});
+// walk in when the street first scrolls into view
+mood(1);bub.classList.add('hide');
+const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();setTimeout(()=>walkTo(step||1,true),250)}},{threshold:.5});io.observe(street);
+})();
 </script>
 </body></html>
